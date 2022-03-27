@@ -1,24 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+import { ethers } from 'ethers';
 import './App.css';
 
+// TODO: Move
+declare global {
+  interface Window {
+    ethereum?: any
+  }
+};
+
+// TODO: Probably not a good place
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
 function App() {
+  async function requestAccount() {
+    try {
+      await provider.send('eth_requestAccounts', []);
+    } catch (error) {
+      alert('Need to sign in to MetaMask');
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>dApp challenge</h1>
       </header>
+      <button onClick={requestAccount}>
+        Connect with MetaMask
+      </button>
     </div>
   );
 }
