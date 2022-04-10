@@ -24,6 +24,7 @@ function App() {
   const [accountAddress, setAccountAddress] = useState<string>();
   const [tokenBalance, setTokenBalance] = useState<number>();
   const [cTokenBalance, setCTokenBalance] = useState<number>();
+  const [history, setHistory] = useState<ethers.Transaction[]>();
 
   const accountChangeHandler = (accountAddress: string) => {
     setAccountAddress(accountAddress);
@@ -52,6 +53,13 @@ function App() {
     await tx.wait(1);
   }
 
+  async function getTransactionHistory(accountAddress: string) {
+    // TODO: Improve
+    let provider = new ethers.providers.EtherscanProvider('kovan');
+    let history = await provider.getHistory(accountAddress);
+    setHistory(history);
+  }
+
   async function requestAccounts() {
     let temporalProvider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(temporalProvider);
@@ -69,6 +77,7 @@ function App() {
       accountChangeHandler(accounts[0]);
       await getTokenBalance(accounts[0], temporalTokenContract);
       await getCTokenBalance(accounts[0], temporalCTokenContract);
+      await getTransactionHistory(accounts[0]);
     } catch (error) {
       console.error(error);
       alert('Need to sign in to MetaMask');
@@ -87,6 +96,23 @@ function App() {
           <h2>{accountAddress}</h2>
           <p>DAI balance: {tokenBalance}</p>
           <p>cDAI balance: {cTokenBalance}</p>
+          <h2>History</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Hash</th>
+              </tr>
+            </thead>
+            <tbody>
+              {history?.map((transaction, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{transaction.hash}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
           <button onClick={supply}>
             Supply 1 DAI
           </button>
