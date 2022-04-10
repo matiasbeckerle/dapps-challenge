@@ -4,18 +4,14 @@ import tokenContractAbi from './abi/tokenContract.json';
 import cTokenContractAbi from './abi/cTokenContract.json';
 import TokenBalance from './components/TokenBalance';
 import TransactionHistory from './components/TransactionHistory';
+import { DAI_CONTRACT_ADDRESS, CDAI_CONTRACT_ADDRESS } from './constants/contracts';
 import './App.css';
 
-// TODO: Move
 declare global {
   interface Window {
     ethereum?: any
   }
 };
-
-// TODO: Move
-const TOKEN_CONTRACT_ADDRESS = '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa';
-const CTOKEN_CONTRACT_ADDRESS = '0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD';
 
 function App() {
   // TODO: Needed?
@@ -48,7 +44,7 @@ function App() {
     const tokenDecimals = 18;
     const tokensToSupply = 1 * Math.pow(10, tokenDecimals);
 
-    let tx = await tokenContract?.approve(CTOKEN_CONTRACT_ADDRESS, tokensToSupply.toString());
+    let tx = await tokenContract?.approve(CDAI_CONTRACT_ADDRESS, tokensToSupply.toString());
     await tx.wait(1);
 
     tx = await cTokenContract?.mint(tokensToSupply.toString());
@@ -68,10 +64,10 @@ function App() {
 
     const signer = temporalProvider.getSigner();
 
-    let temporalTokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, tokenContractAbi, signer);
+    let temporalTokenContract = new ethers.Contract(DAI_CONTRACT_ADDRESS, tokenContractAbi, signer);
     setTokenContract(temporalTokenContract);
 
-    let temporalCTokenContract = new ethers.Contract(CTOKEN_CONTRACT_ADDRESS, cTokenContractAbi, signer);
+    let temporalCTokenContract = new ethers.Contract(CDAI_CONTRACT_ADDRESS, cTokenContractAbi, signer);
     setCTokenContract(temporalCTokenContract);
 
     try {
