@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import tokenContractAbi from './abi/tokenContract.json';
 import cTokenContractAbi from './abi/cTokenContract.json';
+import TokenBalance from './components/TokenBalance';
+import TransactionHistory from './components/TransactionHistory';
 import './App.css';
 
 // TODO: Move
@@ -22,9 +24,9 @@ function App() {
   const [cTokenContract, setCTokenContract] = useState<ethers.Contract>();
 
   const [accountAddress, setAccountAddress] = useState<string>();
-  const [tokenBalance, setTokenBalance] = useState<number>();
-  const [cTokenBalance, setCTokenBalance] = useState<number>();
-  const [history, setHistory] = useState<ethers.Transaction[]>();
+  const [tokenBalance, setTokenBalance] = useState<number>(0);
+  const [cTokenBalance, setCTokenBalance] = useState<number>(0);
+  const [history, setHistory] = useState<ethers.Transaction[]>(new Array<ethers.Transaction>());
 
   const accountChangeHandler = (accountAddress: string) => {
     setAccountAddress(accountAddress);
@@ -33,12 +35,12 @@ function App() {
   // TODO: Reuse these two
 
   const getTokenBalance = async (accountAddress: string, contract: ethers.Contract) => {
-    let balance = await contract.balanceOf(accountAddress) / 1e18;
+    let balance = await contract.balanceOf(accountAddress);
     setTokenBalance(balance);
   }
 
   const getCTokenBalance = async (accountAddress: string, contract: ethers.Contract) => {
-    let balance = await contract.balanceOf(accountAddress) / 1e8;
+    let balance = await contract.balanceOf(accountAddress);
     setCTokenBalance(balance);
   }
 
@@ -94,25 +96,9 @@ function App() {
       {accountAddress ? (
         <div>
           <h2>{accountAddress}</h2>
-          <p>DAI balance: {tokenBalance}</p>
-          <p>cDAI balance: {cTokenBalance}</p>
-          <h2>History</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Hash</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history?.map((transaction, i) => {
-                return (
-                  <tr key={i}>
-                    <td>{transaction.hash}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <TokenBalance name={'DAI'} decimals={18} value={tokenBalance} />
+          <TokenBalance name={'cDAI'} decimals={8} value={cTokenBalance} />
+          <TransactionHistory history={history} />
           <button onClick={supply}>
             Supply 1 DAI
           </button>
