@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import { ethers } from 'ethers';
 
-interface TransactionHistory {
+interface Props {
   history: ethers.Transaction[];
 }
 
-const TransactionHistory: FC<TransactionHistory> = ({ history }) => {
+const TransactionHistory = ({ history }: Props) => {
   return (
     <>
       <h2>History</h2>
