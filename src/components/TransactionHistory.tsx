@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import Typography from '@mui/material/Typography';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Alert from '@mui/material/Alert';
+import Link from '@mui/material/Link';
 
 interface Props {
   history: ethers.Transaction[];
@@ -25,6 +26,7 @@ const TransactionHistory = ({ history }: Props) => {
             <TableHead>
               <TableRow>
                 <TableCell>Hash</TableCell>
+                <TableCell>Amount</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -34,8 +36,16 @@ const TransactionHistory = ({ history }: Props) => {
                     key={i}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
-                      {transaction.hash}
+                    <TableCell component="th" scope="row" sx={{ width: 100 }}>
+                      <Link
+                        href={`https://kovan.etherscan.io/tx/${transaction.hash}`}
+                        target="_blank"
+                        title={transaction.hash}>
+                        {transaction.hash}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      {BigNumber.from(transaction.value).toString()}
                     </TableCell>
                   </TableRow>
                 );
