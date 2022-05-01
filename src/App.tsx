@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import tokenContractAbi from './abi/tokenContract.json';
 import cTokenContractAbi from './abi/cTokenContract.json';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import Account from './components/Account';
 import TokenBalance from './components/TokenBalance';
 import TransactionHistory from './components/TransactionHistory';
@@ -78,18 +82,30 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header>
-        <h1>dApp challenge</h1>
-      </header>
-      <Account accounts={accounts} setAccounts={setAccounts} setProvider={setProvider} />
-      <TokenBalance name={'DAI'} decimals={18} value={tokenBalance} />
-      <TokenBalance name={'cDAI'} decimals={8} value={cTokenBalance} />
-      <TransactionHistory history={history} />
-      <button onClick={supply}>
-        Supply 1 DAI
-      </button>
-    </div>
+    <Container maxWidth="sm" className="App">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h2" sx={{ m: 3 }}>
+          dApp challenge
+        </Typography>
+        <Account accounts={accounts} setAccounts={setAccounts} setProvider={setProvider} />
+        <TokenBalance name={'DAI'} decimals={18} value={tokenBalance} />
+        <TokenBalance name={'cDAI'} decimals={8} value={cTokenBalance} />
+        <TransactionHistory history={history} />
+        <Button onClick={supply}
+          fullWidth
+          variant="contained"
+          sx={{ m: 3 }}>
+          Supply 1 DAI
+        </Button>
+      </Box>
+    </Container>
   );
 }
 

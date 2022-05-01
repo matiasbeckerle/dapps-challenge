@@ -1,5 +1,7 @@
 import React from 'react';
 import { ethers } from 'ethers';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 interface Props {
   accounts: string[];
@@ -26,11 +28,16 @@ const Account = ({ accounts, setAccounts, setProvider }: Props) => {
   return (
     <>
       {isConnected ? (
-        <h2>{accounts[0]}</h2>
+        <Typography component="h2" variant="h4" sx={{ m: 3 }}>
+          {accounts[0]}
+        </Typography>
       ) : (
-        <button onClick={requestAccounts}>
+        <Button onClick={requestAccounts}
+          fullWidth
+          variant="contained"
+          sx={{ m: 3 }}>
           Connect with MetaMask
-        </button>
+        </Button>
       )}
     </>
   );

@@ -1,3 +1,8 @@
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+
 interface Props {
   name: string;
   decimals: number;
@@ -6,8 +11,27 @@ interface Props {
 
 const TokenBalance = ({ name, decimals, value }: Props) => {
   const balance = value / Math.pow(10, decimals);
+
+  const card = (
+    <>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          {name}
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          balance
+        </Typography>
+        <Typography variant="h5">
+          {balance}
+        </Typography>
+      </CardContent>
+    </>
+  );
+
   return (
-    <p>{name} balance: {balance}</p>
+    <Box sx={{ minWidth: 400, m: 1 }}>
+      <Card variant="outlined">{card}</Card>
+    </Box>
   );
 };
 
